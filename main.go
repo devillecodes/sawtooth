@@ -65,7 +65,7 @@ type EndRequest struct {
 }
 
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Your Battlesnake is alive!")
+	fmt.Fprint(w, "Sawtooth lives! Tremble mortals and despair!")
 }
 
 func HandlePing(w http.ResponseWriter, r *http.Request) {
