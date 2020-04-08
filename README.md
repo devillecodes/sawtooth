@@ -1,6 +1,6 @@
 # A simple [Battlesnake](http://play.battlesnake.com) written in Go.
 
-This is a basic implementation of the [Battlesnake API](https://docs.battlesnake.com/snake-api). This project was originally cloned from BattlesnakeOfficial/starter-snake-go.
+This is a basic implementation of the [Battlesnake API](https://docs.battlesnake.com/snake-api). This project was originally cloned from [starter-snake-go](https://github.com/BattlesnakeOfficial/starter-snake-go) (by [BattlesnakeOfficial](https://github.com/BattlesnakeOfficial)).
 
 This project is being built as part of a [100 Days Of Code](https://github.com/devillexio/100-days-of-code/blob/master/log.md) challenge, and also to learn more about Go.
 
