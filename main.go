@@ -74,15 +74,14 @@ func HandlePing(w http.ResponseWriter, r *http.Request) {
 
 // HandleStart is called at the start of each game your Battlesnake is playing.
 // The StartRequest object contains information about the game that's about to start.
-// TODO: Use this function to decide how your Battlesnake is going to look on the board.
 func HandleStart(w http.ResponseWriter, r *http.Request) {
 	request := StartRequest{}
 	json.NewDecoder(r.Body).Decode(&request)
 
 	response := StartResponse{
-		Color:    "#888888",
-		HeadType: "regular",
-		TailType: "regular",
+		Color:    "#600AAA",
+		HeadType: "fang",
+		TailType: "fang",
 	}
 
 	fmt.Print("START\n")
