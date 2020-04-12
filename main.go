@@ -9,6 +9,14 @@ import (
 	"os"
 )
 
+// All the possible moves.
+const (
+	Up    string = "up"
+	Down  string = "down"
+	Left  string = "left"
+	Right string = "right"
+)
+
 type Coord struct {
 	X int `json:"x"`
 	Y int `json:"y"`
@@ -81,7 +89,7 @@ func HandleStart(w http.ResponseWriter, r *http.Request) {
 	response := StartResponse{
 		Color:    "#600AAA",
 		HeadType: "fang",
-		TailType: "fang",
+		TailType: "sharp",
 	}
 
 	fmt.Print("START\n")
@@ -91,14 +99,11 @@ func HandleStart(w http.ResponseWriter, r *http.Request) {
 
 // HandleMove is called for each turn of each game.
 // Valid responses are "up", "down", "left", or "right".
-// TODO: Use the information in the MoveRequest object to determine your next move.
 func HandleMove(w http.ResponseWriter, r *http.Request) {
 	request := MoveRequest{}
 	json.NewDecoder(r.Body).Decode(&request)
 
-	// Choose a random direction to move in
-	possibleMoves := []string{"up", "down", "left", "right"}
-	move := possibleMoves[rand.Intn(len(possibleMoves))]
+	move := NextMove(request)
 
 	response := MoveResponse{
 		Move: move,
@@ -117,6 +122,51 @@ func HandleEnd(w http.ResponseWriter, r *http.Request) {
 
 	// Nothing to respond with here
 	fmt.Print("END\n")
+}
+
+// NextMove determines what our next move should be.
+func NextMove(r MoveRequest) (move string) {
+	// Choose a random direction to move in
+	possibleMoves := []string{Up, Down, Left, Right}
+	move = possibleMoves[rand.Intn(len(possibleMoves))]
+	return move
+}
+
+// AgainstWall determines whether a snake's head is against the edge of the
+// board.
+func AgainstWall(s Snake, b Board) bool {
+	hix, wix := b.Height-1, b.Width-1
+	head := s.Body[0]
+	if head.X == 0 || head.X == wix {
+		return true
+	}
+	if head.Y == 0 || head.Y == hix {
+		return true
+	}
+	return false
+}
+
+// TowardNearestWall returns direction towards nearest wall.
+// Left and right are favoured over up and down when distances are equal.
+func TowardNearestWall(s Snake, b Board) string {
+	w, h := b.Width, b.Height
+	head := s.Body[0]
+
+	fromLeft := head.X + 1
+	fromRight := w - head.X
+	fromTop := head.Y + 1
+	fromBotton := h - head.Y
+
+	switch {
+	case fromRight < fromLeft && fromRight <= fromTop && fromRight <= fromBotton:
+		return Right
+	case fromTop < fromLeft && fromTop < fromBotton && fromTop < fromRight:
+		return Up
+	case fromBotton < fromLeft && fromBotton < fromTop && fromBotton < fromRight:
+		return Down
+	default:
+		return Left
+	}
 }
 
 func main() {
