@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
 	"os"
 )
@@ -133,10 +132,7 @@ func NextMove(r MoveRequest) (move string) {
 		return TowardNearestWall(s, b)
 	}
 
-	// Choose a random direction to move in
-	possibleMoves := []string{Up, Down, Left, Right}
-	move = possibleMoves[rand.Intn(len(possibleMoves))]
-	return move
+	return HugWall(s, b)
 }
 
 // AgainstWall determines whether a snake's head is against the edge of the
@@ -189,10 +185,10 @@ func HugWall(s Snake, b Board) string {
 	case head.Y == hix && head.X > 0 && head.X <= wix:
 		return Left
 	case head.X == 0 && head.Y > 0:
+		fallthrough
+	default:
 		return Up
 	}
-
-	return ""
 }
 
 func main() {
