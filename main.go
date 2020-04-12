@@ -126,6 +126,13 @@ func HandleEnd(w http.ResponseWriter, r *http.Request) {
 
 // NextMove determines what our next move should be.
 func NextMove(r MoveRequest) (move string) {
+	b := r.Board
+	s := r.You
+
+	if !AgainstWall(s, b) {
+		return TowardNearestWall(s, b)
+	}
+
 	// Choose a random direction to move in
 	possibleMoves := []string{Up, Down, Left, Right}
 	move = possibleMoves[rand.Intn(len(possibleMoves))]
@@ -167,6 +174,25 @@ func TowardNearestWall(s Snake, b Board) string {
 	default:
 		return Left
 	}
+}
+
+// HugWall ensures we keep hugging the wall in a clockwise direction.
+func HugWall(s Snake, b Board) string {
+	wix, hix := b.Width-1, b.Height-1
+	head := s.Body[0]
+
+	switch {
+	case head.Y == 0 && head.X < wix:
+		return Right
+	case head.X == wix && head.Y < hix:
+		return Down
+	case head.Y == hix && head.X > 0 && head.X <= wix:
+		return Left
+	case head.X == 0 && head.Y > 0:
+		return Up
+	}
+
+	return ""
 }
 
 func main() {

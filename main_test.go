@@ -97,3 +97,35 @@ func TestTowardNearestWall(t *testing.T) {
 		})
 	}
 }
+
+func TestHugWall(t *testing.T) {
+	b3x3 := Board{3, 3, []Coord{}, []Snake{}}
+
+	var tests = []struct {
+		s    Snake
+		b    Board
+		want string
+	}{
+		{Snake{Body: []Coord{{0, 0}}}, b3x3, Right},
+		{Snake{Body: []Coord{{0, 1}}}, b3x3, Up},
+		{Snake{Body: []Coord{{0, 2}}}, b3x3, Up},
+
+		{Snake{Body: []Coord{{1, 0}}}, b3x3, Right},
+		{Snake{Body: []Coord{{1, 2}}}, b3x3, Left},
+
+		{Snake{Body: []Coord{{2, 0}}}, b3x3, Down},
+		{Snake{Body: []Coord{{2, 1}}}, b3x3, Down},
+		{Snake{Body: []Coord{{2, 2}}}, b3x3, Left},
+	}
+
+	for _, tt := range tests {
+		Body := tt.s.Body[0]
+		testname := fmt.Sprintf("[%v,%v],[%v,%v]", Body.X, Body.Y, tt.b.Width, tt.b.Height)
+		t.Run(testname, func(t *testing.T) {
+			result := HugWall(tt.s, tt.b)
+			if result != tt.want {
+				t.Errorf("got %v, want %v", result, tt.want)
+			}
+		})
+	}
+}
