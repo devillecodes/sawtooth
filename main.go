@@ -16,11 +16,13 @@ const (
 	Right string = "right"
 )
 
+// Coord represents the X and Y coordinates of a single cell on the board.
 type Coord struct {
 	X int `json:"x"`
 	Y int `json:"y"`
 }
 
+// Snake represents a snake on the board, yours or an opponents.
 type Snake struct {
 	ID     string  `json:"id"`
 	Name   string  `json:"name"`
@@ -28,6 +30,7 @@ type Snake struct {
 	Body   []Coord `json:"body"`
 }
 
+// Board represents the battlefield where many a noble snake have competed.
 type Board struct {
 	Height int     `json:"height"`
 	Width  int     `json:"width"`
@@ -35,10 +38,12 @@ type Board struct {
 	Snakes []Snake `json:"snakes"`
 }
 
+// Game contains the ID of a game being played.
 type Game struct {
 	ID string `json:"id"`
 }
 
+// StartRequest contains all the particulars to start a battle.
 type StartRequest struct {
 	Game  Game  `json:"game"`
 	Turn  int   `json:"turn"`
@@ -46,12 +51,14 @@ type StartRequest struct {
 	You   Snake `json:"you"`
 }
 
+// StartResponse contains the physical characteristics of your snake.
 type StartResponse struct {
 	Color    string `json:"color,omitempty"`
 	HeadType string `json:"headType,omitempty"`
 	TailType string `json:"tailType,omitempty"`
 }
 
+// MoveRequest contains all the details you need to decide where to move next.
 type MoveRequest struct {
 	Game  Game  `json:"game"`
 	Turn  int   `json:"turn"`
@@ -59,11 +66,13 @@ type MoveRequest struct {
 	You   Snake `json:"you"`
 }
 
+// MoveResponse contains the details the server needs for your next move.
 type MoveResponse struct {
 	Move  string `json:"move"`
 	Shout string `json:"shout,omitempty"`
 }
 
+// EndRequest is the final step in a game. Hopefully you were victorius!
 type EndRequest struct {
 	Game  Game  `json:"game"`
 	Turn  int   `json:"turn"`
@@ -71,10 +80,12 @@ type EndRequest struct {
 	You   Snake `json:"you"`
 }
 
+// HandleIndex is the root handler of this Battlesnake client.
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Sawtooth lives! Tremble mortals and despair!")
 }
 
+// HandlePing tells the server your snake is in the saddle and ready for battle.
 func HandlePing(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "pong")
 }
